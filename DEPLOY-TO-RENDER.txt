@@ -1,0 +1,40 @@
+FILES MUST BE IN THE ROOT OF YOUR GITHUB REPO.
+
+What to upload to GitHub:
+- package.json
+- package-lock.json
+- server.js
+- render.yaml
+- index.html
+- rewards.html
+- transfer.html
+- toolbox.html
+- admin.html
+- style.css
+- utils.js
+- auth.js
+- admin.js
+- wallet.js
+- manifest.json
+- sw.js
+- tiktokicon.png
+- README.txt
+- data/ folder
+
+Quick local test:
+1) open terminal in this folder
+2) run: npm install
+3) run: npm start
+4) open: http://localhost:3000
+
+Render deploy:
+1) unzip this file
+2) upload ALL extracted files to the ROOT of your GitHub repo
+3) in Render use:
+   Build Command: npm install
+   Start Command: node server.js
+4) if Render asks for Root Directory, leave it blank
+
+Admin login:
+username: admin
+password: crazzyadmin123

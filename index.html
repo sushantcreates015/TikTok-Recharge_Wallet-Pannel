@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Wallet Demo</title>
+    <meta name="description" content="Educational wallet demo with local FastAPI backend.">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/tiktokicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/style.css">
+    <meta name="theme-color" content="#111111">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+
+<body class="bg-neutral-100 text-neutral-950">
+    <div class="app-frame shadow-[0_30px_80px_rgba(0,0,0,0.08)]" id="appShell">
+        <div class="min-h-dvh flex items-center justify-center px-6 text-center text-sm text-neutral-500">
+            Loading application...
+        </div>
+    </div>
+
+    <script>
+        async function fetchPartial(path) {
+            const response = await fetch(path, { credentials: 'same-origin' });
+            if (!response.ok) {
+                throw new Error('Failed to load ' + path + ': ' + response.status);
+            }
+            return response.text();
+        }
+
+        function loadScript(path) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = path;
+                script.defer = false;
+                script.onload = resolve;
+                script.onerror = () => reject(new Error('Failed to load ' + path));
+                document.body.appendChild(script);
+            });
+        }
+
+        async function boot() {
+            const shell = document.getElementById('appShell');
+
+            try {
+                const partials = await Promise.all([
+                    fetchPartial('/rewards.html'),
+                    fetchPartial('/transfer.html'),
+                    fetchPartial('/toolbox.html'),
+                    fetchPartial('/admin.html')
+                ]);
+
+                shell.innerHTML = partials.join('\n');
+
+                await loadScript('/utils.js');
+                await loadScript('/auth.js');
+                await loadScript('/admin.js');
+                await loadScript('/wallet.js');
+            } catch (error) {
+                shell.innerHTML = [
+                    '<div class="min-h-dvh flex items-center justify-center px-6">',
+                    '  <div class="max-w-md rounded-2xl bg-white p-6 shadow-lg">',
+                    '    <h1 class="text-lg font-bold text-neutral-900">Application failed to load</h1>',
+                    '    <p class="mt-2 text-sm text-neutral-600">' + error.message + '</p>',
+                    '  </div>',
+                    '</div>'
+                ].join('');
+                console.error(error);
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch((err) => console.warn('SW registration failed', err));
+            });
+        }
+
+        boot();
+    </script>
+</body>
+
+</html>

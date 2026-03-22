@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "tiktok": {"nickname": "TikTok Official", "followers": "89.1M"},
+    "charlidamelio": {"nickname": "charli d'amelio", "followers": "155.7M"},
+    "khaby.lame": {"nickname": "Khabane Lame", "followers": "162.4M"},
+    "mrbeast": {"nickname": "MrBeast", "followers": "112.6M"},
+    "demo": {"nickname": "Demo Creator", "followers": "125.4K"}
+  }
+}
